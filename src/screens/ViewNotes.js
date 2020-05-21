@@ -2,34 +2,45 @@ import React,{useState,  useContext} from 'react'
 import { StyleSheet, View, FlatList } from 'react-native';
 import { Text, FAB, List } from 'react-native-paper'
 import Header from '../component/Header'
-import { Context as NotesContext } from '../context/NotesContext';
+// import { Context as NotesContext } from '../context/NotesContext';
+import {useSelector, useDispatch} from 'react-redux'
+import {addnote, deletenote} from '../reducer/notesApp'
 
 function ViewNotes({navigation}){
     // const [notes, setNotes] = useState([])
+    const notes = useSelector(state => state)
+    const dispatch = useDispatch()
 
-    const {state, addNote, deleteNote} = useContext(NotesContext)
+    // const {state, addNote, deleteNote} = useContext(NotesContext)
 
-    const addNotes = note => {
-        note.id = state.length + 1
-        addNote(note)
-
-        // setNotes([...notes, note])
+    const addNote = note => {
+        console.log(notes)
+        dispatch(addnote(note))
     }
+
+    const deleteNote = id => dispatch(deletenote(id))
+
+    // const addNotes = note => {
+    //     note.id = state.length + 1
+    //     addNote(note)
+
+    //     // setNotes([...notes, note])
+    // }
     return(
         <>
         <Header titleText="Simple Note Taking App" />
         <View style={styles.container}>
-            {state.length === 0 ? (
+            {notes.length === 0 ? (
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>You do not have any Notes</Text>
                 </View>
             ): (
                 <FlatList 
-                    data = {state}
+                    data = {notes}
                     renderItem = {({item}) => (
                         <List.Item 
-                            title = {item.noteTitle}
-                            descriptio = {item.noteDescription}
+                            title = {item.note.noteTitle}
+                            description = {item.note.noteDescription}
                             decriptionNumberOfLines = {1}
                             titleStyle = {styles.listTitle}
                             onPress = {()=> deleteNote(item.id)}
@@ -44,7 +55,7 @@ function ViewNotes({navigation}){
                 icon = 'plus'
                 label= 'Add new Note'
                 onPress={() => navigation.navigate('AddNotes', {
-                    addNotes
+                    addNote
                 })
             }
             />
