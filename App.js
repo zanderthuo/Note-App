@@ -1,19 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {Provider as PaperProvider} from 'react-native-paper'
+import AppNavigator from './src/navigation/index'
+import { Provider as NoteProvider } from './src/context/NotesContext';
 
-export default function App() {
+export default function App(){
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    <NoteProvider>
+      <AppNavigator />
+    </NoteProvider>
+  )
+} 
